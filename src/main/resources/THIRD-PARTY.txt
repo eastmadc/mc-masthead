@@ -1,0 +1,14 @@
+Third-party parts of Masthead
+
+Bundled in this jar:
+- QR Code generator by Project Nayuki: MIT. License: LICENSE-qrcodegen.txt (jar root).
+- Fonts, unmodified from the google/fonts repository, all SIL Open Font License 1.1. Each license sits next to its
+  font files, at the same path in this jar and in the web output:
+  Pixelify Sans          fonts/pixelify-sans/OFL.txt
+  Atkinson Hyperlegible  fonts/atkinson-hyperlegible/OFL.txt
+  JetBrains Mono         fonts/jetbrains-mono/OFL.txt
+
+Not bundled: Paper downloads these from Maven Central or Paper's default mirror the first time the plugin loads
+(plugin.yml libraries:), in every writer mode:
+- com.anthropic:anthropic-java 3.5.0: Apache-2.0 (the SDK moved from MIT to Apache-2.0 at 3.0.0).
+- Its parts OkHttp, Okio, Jackson and the Kotlin standard library: Apache-2.0.

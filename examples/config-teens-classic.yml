@@ -1,0 +1,89 @@
+# Example preset: a chicken-theme paper for a group of teenage friends, in the classic voice.
+# Copy the parts you want into plugins/Masthead/config.yml. The generic defaults are in src/main/resources/config.yml.
+paper:
+  name: "The Coop Courier"
+  server-name: "Featherfield"
+  tagline: "Hot off the press before the rooster wakes up."
+  theme: "a small-town paper for a town that takes its chickens far too seriously"
+  readers: "a group of friends who play on this server"
+  awards:
+    good: "🥚 Egg of the Day"
+    bad: "🐔 Flapping Fowl Award"
+  watch-animal: chicken
+
+tone:
+  # spicy, pg13 (2-3 swears, each the punchline), slang heavy, long.
+  audience: teens
+  voice: classic
+  spice: spicy
+  language: pg13
+  slang: heavy
+  length: long
+  bits: [obituaries, sports, weather, horoscopes, animal-watch]
+  lexicon:
+    add: []
+    remove: []
+
+owner:
+  name: "Rex_Owner"
+  desk-title: "From the Coop Office"
+  hours-ok: true
+  pronoun: he
+  lore:
+    - 'The Torch Trail: Rex_Owner lit every cave under spawn with one long torch trail and walked out with a stack of diamonds. Nobody needs x-ray with that many torches.'
+    - 'The first lighthouse on the sand bar is his, and he repaints it every time someone brings it up.'
+
+privacy:
+  hide-players: []
+  never-mention:
+    - "real names, schools, or where anyone lives"
+    - "anyone's age or birthday"
+    - "where anyone's base is"
+
+schedule:
+  time: "05:30"
+
+writer:
+  # A host helper answers requests (see tools/masthead-exchange.sh). It must be running: without it the paper
+  # waits timeout-seconds (15 minutes here) before the console asks whether the helper is running.
+  mode: exchange
+  timeout-seconds: 900
+  desk-timeout-seconds: 150
+
+web:
+  # Public: anyone who can reach the port can read the paper. Add  bind: "127.0.0.1"  to keep it on this machine.
+  mode: builtin
+
+features:
+  mailroom: true
+  blotter: true
+  readership: true
+  join-message: true
+  join-delay-seconds: 3
+  building-report: true
+  construction: true
+
+# Construction news as a practice run: work everything out, print nothing.
+construction:
+  title: "Planning & Zoning"
+  print: false
+  default-level: private
+  opted-in: [Alex_Miner, Steve_Builder, Sol_Dig, Juno_B, Kai_Ore, Wren_5, Rex_Owner, Alex_Fan, Bob_Bricks]
+  names: true
+  forget-after-days: 90
+  cross-demolition: blotter
+
+commands:
+  news: [daily]
+  letter: [mail]
+  awards: [award]
+  stats: [mystats]
+  masthead: [mh]
+  build: [permit]
+
+alerts:
+  # Set at least one, or /letter stays closed. Keep them private: these pushes name players.
+  ntfy-url: ""
+  discord-webhook: ""
+  # Leave false with tools/masthead-exchange.sh: that helper does not push worried letters.
+  helper-pushes-concerns: false

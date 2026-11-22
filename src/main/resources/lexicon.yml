@@ -1,0 +1,93 @@
+# Masthead's shipped word list: the game words and slang the writer may use, and when.
+# Server owners don't edit this file: add your own words with tone.lexicon.add and drop shipped ones with
+# tone.lexicon.remove in config.yml. Words on the floor (WordGate.FLOOR: sexual, looks, age and family, cheating, drugs,
+# slurs, pile-on) can never be added, at any setting.
+#
+# Each term:
+#   term         what the writer sees
+#   forms        what the gates and the cooldown look for (default: the term), whole words, any spelling
+#   kind         game  - Minecraft's own words. Offered at every slang level, even off, when today's facts back them.
+#                slang - internet and gamer slang. Capped by tone.slang (off: none, light: 2 a paper, heavy: 3; newsroom
+#                        keeps heavy at 2, and the classic voice has no count).
+#                read  - a guess from a combination of stats. Offered as a guess with its numbers, never as a fact.
+#   tier         all-ages | teens | adults. tone.audience decides which tiers are offered.
+#   means        how to use it, one line
+#   needs        when today's facts back it (missing = always). A map, or a list of maps (any one of them).
+#                Per player (the same player must match every key): stat, zero, killed, mined, used, crafted, advancement.
+#                Whole day: death, mob-death, pvp, blotter (all kinds listed, between the same two players), race, fumble
+#                (races and fumbles skip boards where first is worst: deaths, damage_taken), recent, lore, building, tps, leaders.
+#                never - the word claims a play the facts can't show: never offered, always stopped by the gate.
+#   claim        true = the word says a play happened. Used in a paper whose facts don't back it, the draft goes back for a rewrite.
+#   fresh-until  past this date the word is fading (offered only at slang heavy); a year past it, expired (never offered).
+#                Missing = evergreen. A word that can date is slang, never game (so the slang cap and the cooldown apply).
+#   rests        true = a game word that rests after a recent paper used it, like every slang word and read.
+# Left out on purpose (dated or fellow-kids, so not shipped): no cap, bestie, fr, bussin, slay, yeet, sheesh, poggers,
+# it's giving, hits different, lit, fam, the big 26, skibidi, fanum tax, "creeper, aw man", main character, X energy,
+# goated, ate, aura, nonchalant, sweat, built different, rizz (WordGate.DATED stops these in a draft). People-aimed (on the
+# floor): bozo, delulu, NPC, skill issue, washed, dogwater. glazing: its other sense is sexual. lava chicken: a 2025 movie meme.
+# lore: the owner's lore list already tells the storylines, and the prompt uses "lore" as a plain word.
+# set spawn: a bed entry pairs players in beds (the Blotter no longer sends them).
+# Not a claim word: "speedran" ("The circle of life, speedran.") reads as a figure of speech, not a speedrun.
+# Gendered address: bro, dude, king, queen, twin.
+masthead-lexicon: 1
+reviewed: 2026-11-06
+review-every-days: 120
+terms:
+  # ---------------------------------------------------------------- game words (Minecraft)
+  - {term: skelly, kind: game, tier: all-ages, rests: true, means: "the Skeleton (in today's death messages or kills)", needs: [{death: [Skeleton]}, {killed: {skeleton: 1}}]}
+  - {term: zombo, kind: game, tier: all-ages, rests: true, means: "the Zombie (in today's death messages or kills)", needs: [{death: [Zombie]}, {killed: {zombie: 1}}]}
+  - {term: creepered, forms: [creepered, creeper d], kind: game, tier: all-ages, claim: true, means: "blown up by a Creeper", needs: {death: [blown up by Creeper]}}
+  - {term: mace smash, forms: [mace smash, mace smashed], kind: game, tier: all-ages, claim: true, means: "a mace kill (a PvP kill: the death line says who smashed whom)", needs: {death: [smashed], pvp: true}}
+  - {term: Intentional Game Design, kind: game, tier: all-ages, means: "the bed-explosion death message; quote it", needs: {death: [Intentional Game Design]}}
+  - {term: deepslate diamonds, kind: game, tier: all-ages, means: "deepslate diamond ore broken today (say ore, never diamonds in a chest)", needs: {stat: {mined_deepslate_diamond_ore: 1}}}
+  - {term: the grind, kind: game, tier: all-ages, rests: true, means: "1,000+ blocks broken today (say the count; never the block mix unless \"mined\" lists it)", needs: {stat: {blocks_mined: 1000}}}
+  - {term: cobble, kind: game, tier: all-ages, means: "cobblestone", needs: [{mined: {cobblestone: 1}}, {used: {cobblestone: 1}}]}
+  - {term: villagers, kind: game, tier: all-ages, means: "the villagers who traded today; never a player", needs: {stat: {trades: 1}}}
+  - {term: redstone, forms: [redstone, hoppers], kind: game, tier: all-ages, means: "redstone or hoppers crafted today (say which one \"crafted\" lists)", needs: [{crafted: {redstone: 1}}, {crafted: {hopper: 1}}]}
+  - {term: palette, kind: game, tier: all-ages, rests: true, means: "a builder's block mix", needs: {building: true}}
+  - {term: K board, kind: game, tier: all-ages, rests: true, means: "the season player_kills standings in \"leaders\", on a day with PvP", needs: {leaders: [player_kills], pvp: true}}
+  - {term: popped a totem, forms: [popped a totem, popped * totem, totem popped, totem pop], kind: game, tier: all-ages, claim: true, means: "a Totem of Undying saved them", needs: {used: {totem_of_undying: 1}}}
+  - {term: pearled, forms: [pearled, pearled away], kind: game, tier: all-ages, claim: true, means: "threw an ender pearl", needs: {used: {ender_pearl: 1}}}
+  - {term: bodied, kind: game, tier: teens, claim: true, means: "beat a player in PvP; only for a kill in \"pvp\"", needs: {pvp: true}}
+  - {term: TPS, kind: game, tier: all-ages, rests: true, means: "the server's tick rate (20 is perfect); lag blame comes from the owner's lore only", needs: {tps: true}}
+  # claim words: the facts can never show these plays, so they are never offered and always stopped
+  - {term: bucket clutch, forms: [bucket clutch, water bucket clutch, mlg, mlg water], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: pearl clutch, kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: clutch, forms: [clutch], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: one shot, forms: [one shot, one shotted], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: crit, forms: [crit, crits, critted, one tapped, one tap], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: combo'd, forms: [combo d, comboed, w tap, w tapped], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: combat logged, forms: [combat logged, combat log, combat logging], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: spawn camping, forms: [spawn camping, spawn camped, spawn camp], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: trading hall, kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: iron farm, forms: [iron farm, xp farm, gold farm, raid farm, afk farm, mob farm], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: third-partied, forms: [third partied, third party], kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+  - {term: chicken jockey, kind: game, tier: all-ages, claim: true, means: "never", needs: never}
+
+  # ---------------------------------------------------------------- reads (guesses from stat combinations)
+  - {term: librarian reroll, forms: [librarian reroll, rerolled, rerolling, reroll], kind: read, tier: all-ages, means: "lecterns broken plus villager trades", needs: {mined: {lectern: 20}, stat: {trades: 1}}}
+  - {term: spawn-proofing, forms: [spawn proofing, spawn proofed, spawn proof], kind: read, tier: all-ages, means: "a pile of torches crafted", needs: {crafted: {torch: 100}}}
+  - {term: a storage or sorter day, forms: [storage day, sorter day, sorter], kind: read, tier: all-ages, means: "hoppers crafted", needs: {crafted: {hopper: 10}}}
+  - {term: a tech-tree day, forms: [tech tree], kind: read, tier: all-ages, means: "gear advancements plus better pickaxes", needs: {advancement: [Suit Up, "Diamonds!", "Isn't It Iron Pick"], crafted: {iron_pickaxe: 1}}}
+  - {term: snow golem building, forms: [snow golem, snow golems], kind: read, tier: all-ages, means: "carved pumpkins and snow blocks used", needs: {used: {carved_pumpkin: 20, snow_block: 50}}}
+  - {term: a farm-level count, forms: [farm level, farm sized], kind: read, tier: all-ages, means: "a kill or craft count only a farm makes (say it your own way; never say farm as a fact)", needs: [{killed: {silverfish: 500}}, {crafted: {gold_nugget: 1000}}]}
+
+  # ---------------------------------------------------------------- slang (gamer and teen)
+  - {term: W / L, forms: [w, l], kind: slang, tier: all-ages, means: "inside a sentence about one play (\"took the L to a zombo\"); never a one-word sentence, never calls a player an L", needs: [{stat: {deaths: 1}}, {race: true}]}
+  - {term: diff, kind: slang, tier: all-ages, means: "the skill gap that decided a head-to-head race (mining, kills, PvP, sprint); both numbers in the sentence; never on walking or jumping", needs: {race: true}}
+  - {term: cooked, kind: slang, tier: all-ages, means: "done for, right after a death or a lost race", needs: [{stat: {deaths: 1}}, {race: true}], fresh-until: 2027-12-31}
+  - {term: folded, kind: slang, tier: all-ages, means: "died, to the mob or player in the death message, or N times by the count", needs: {stat: {deaths: 1}}, fresh-until: 2027-12-31}
+  - {term: free, forms: [free kills, free kill, free win, free wins], kind: slang, tier: all-ages, claim: true, means: "kills that cost nothing (0 deaths, with both numbers in the sentence)", needs: {stat: {mob_kills: 10}, zero: [deaths]}, fresh-until: 2027-12-31}
+  - {term: fumbled, forms: [fumbled, fumbling], kind: slang, tier: all-ages, claim: true, means: "leads a season board but lost today's race on that same stat", needs: {fumble: true}, fresh-until: 2027-12-31}
+  - {term: mid, forms: [is mid, was mid, were mid, so mid, kinda mid, pretty mid, mid at best, just mid], kind: slang, tier: teens, means: "a middle-of-the-pack number in a race; about the number, never the player", needs: {race: true}, fresh-until: 2026-12-31}
+  - {term: GG, kind: slang, tier: all-ages, means: "closes a race on today's board (the final numbers in the sentence)", needs: {race: true}}
+  - {term: lowkey, kind: slang, tier: all-ages, means: "a quietly big number nobody's talking about", fresh-until: 2026-12-31}
+  - {term: side quest, kind: slang, tier: all-ages, means: "a detour stat next to the main grind (lecterns, eggs, cake)", needs: [{stat: {eggs: 50}}, {stat: {cake: 1}}, {mined: {lectern: 10}}], fresh-until: 2027-12-31}
+  - {term: rage bait, kind: slang, tier: all-ages, claim: true, means: "X took N and X left M in the same player's container (both counts; no order, no motive)", needs: {blotter: [took_from, left_in]}, fresh-until: 2027-06-30}
+  - {term: nerf, forms: [nerf, nerfed], kind: slang, tier: all-ages, means: "ask the game to weaken a mob that just got someone", needs: {mob-death: true}}
+  - {term: it's so over / we're so back, forms: [so over, so back], kind: slang, tier: all-ages, means: "a swing in a storyline from \"recent_editions\"", needs: {recent: true}, fresh-until: 2027-06-30}
+  - {term: let them cook, forms: [let them cook, let him cook, let her cook], kind: slang, tier: all-ages, means: "a player still pushing a big stat in an ongoing race; never about mobs or items", needs: {race: true}, fresh-until: 2027-06-30}
+  - {term: tuff, forms: [is tuff, so tuff, kinda tuff, that's tuff, thats tuff, pretty tuff, was tuff, lowkey tuff], kind: slang, tier: all-ages, means: "impressive, about a stat in the same sentence", needs: {race: true}, fresh-until: 2027-06-30}
+  - {term: clip it, forms: [clip it, clip that], kind: slang, tier: all-ages, means: "save that moment: a death or a PvP kill", needs: [{stat: {deaths: 1}}, {pvp: true}], fresh-until: 2027-06-30}
+  - {term: larping, kind: slang, tier: teens, means: "pretending; only about a mob, never a player", needs: {mob-death: true}, fresh-until: 2027-06-30}
+  - {term: crash out, forms: [crash out, crashed out], kind: slang, tier: teens, means: "a meltdown; only about a mob in today's death messages, never a player or the server", needs: {mob-death: true}, fresh-until: 2027-06-30}

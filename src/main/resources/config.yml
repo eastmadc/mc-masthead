@@ -1,0 +1,286 @@
+# A daily AI newspaper for your Minecraft server.
+# Change a value, save, then run /masthead reload (no restart needed). Anything invalid falls back to the default
+# and is reported in the console.
+
+# Leave this alone: when a new version adds settings, Masthead adds them here (after saving a copy of this file).
+config-version: 1
+
+paper:
+  # The paper's name, shown everywhere (web page, book, join message).
+  name: "The Daily Block"
+  # Your server's name (the paper calls itself "the morning paper of <server-name>").
+  server-name: "our Minecraft server"
+  tagline: "Delivered every morning."
+  # The running joke the paper is built on. One sentence. Example: "a small-town paper for a town that takes its
+  # chickens far too seriously" (then set watch-animal: chicken and add animal-watch to tone.bits).
+  theme: "a small-town paper that takes everything happening on this server far too seriously"
+  # Who reads it. The writer pitches the humor at them (it never caps anything: tone.audience does that).
+  readers: "players of all ages"
+  awards:
+    good: "🏆 Play of the Day"     # the day's coolest play
+    bad: "🤡 Fumble of the Day"    # the day's most chaotic play
+  # The animal the "<Animal> Watch" column follows (tone.bits: animal-watch). Kills of it, plus eggs thrown for chickens.
+  watch-animal: chicken
+  # Spelling and dates: en-US (color, "Sat Nov 14, 2026") | en-GB (colour, "Sat 14 Nov 2026").
+  # Not the same as tone.language below, which is how much the paper swears.
+  language: en-US
+
+# Three ready-made mixes (copy one in, readers line included: the writer pitches the jokes at the readers):
+#   family server:   audience: all-ages  spice: medium  language: clean  slang: light
+#                    readers: "players of all ages"
+#   friends 13-17:   audience: teens     spice: spicy   language: pg13   slang: heavy  voice: sportscast
+#                    readers: "a group of friends who play on this server"
+#   adult SMP:       audience: adults    spice: savage  language: strong slang: heavy  voice: sportscast
+#                    readers: "longtime players on this server who can take a roast"
+# Whatever you pick, the hard lines never move: facts only, no places or times of day, nothing about real life, looks,
+# school or family, no cheating accusations, roasts hit plays (never people), nothing sexual, no drug, slur or
+# identity-mocking slang, no jokes about names, no insults about builds (the writer is always told so; at spice savage
+# the plugin itself only stops a few fixed build insults such as "noob box" and "dirt hut").
+# A few things open up as the dials go up, for every AI call (the paper, its rewrites and the editor desk's replies):
+#   spice savage, teens or adults:  gamer trash talk about a play (skill issue, noob, ez, washed, dogwater)
+#   spice savage, adults:           "sus" jokes on a real number (never about ore, loot or luck: the plugin sends one
+#                                   back unless its sentence, or the one before, has a number and no such word)
+#   audience adults:                drinking jokes and words, and the writer is told its readers are grown-ups
+#                                   (ruder, darker, drier)
+# They open up for what the paper writes. A player's own letter is always checked against the full list.
+tone:
+  # Who reads the paper. This caps the three dials below, and a value above the cap is lowered (the console says so):
+  #   all-ages - spice up to medium, language clean, slang light, only all-ages words
+  #   teens    - spice up to savage, language up to pg13, slang up to heavy, all-ages and teens words
+  #   adults   - everything below, plus the grown-up extras listed above
+  audience: all-ages
+  # Who is talking:
+  #   newsroom   - a small-town paper taking this server far too seriously (dry, little slang)
+  #   group-chat - one of the players writing the paper as a bit
+  #   sportscast - the server's caster recapping the day as a match: standings, box scores, the best and worst play
+  #   classic    - a shorter, looser prompt: a deadpan small-town paper with room to be funny (hen quotes, the
+  #                police-blotter voice, a classified owner file); no quotas. Slang off: none; light: a little;
+  #                heavy: written the way the readers talk (game lingo and their slang, worked into the sentence, never
+  #                tacked on), with no count; the dated-slang check is off. Change its slang words with lexicon below.
+  # Empty = newsroom for mild/medium, sportscast for spicy/savage.
+  voice: ""
+  # How hard the paper roasts: mild | medium | spicy | savage
+  spice: medium
+  # Swearing (not spelling: that is paper.language): clean (none) | pg13 (aims for 2-3 mild swears, each the punchline) |
+  # strong (aims for 3-4 swears, f-word allowed, never at a player)
+  language: clean
+  # Internet slang on top of the game's own words: "off" | light (up to 2 a paper) | heavy (up to 3; newsroom keeps it at 2).
+  # The classic voice has no count (see voice above).
+  # Minecraft words (skelly, deepslate, advancement titles...) are always on, and only when the day's facts back them.
+  slang: light
+  # short (150-300 words) | normal (450-700) | long (500-800)
+  length: normal
+  # Recurring sections. Any of: obituaries, sports, weather, horoscopes, market, classifieds, animal-watch
+  bits: [obituaries, sports, weather, horoscopes]
+  # The words the writer may use come from Masthead's own list (checked 2026-11-06; each word has an age tier and a
+  # "fresh until" date, and a word used in a recent paper rests). Change it here:
+  lexicon:
+    # Your server's own words. kind: game (always offered) or slang (counts toward the slang cap). tier: all-ages | teens | adults.
+    # means: what the word means, up to 60 characters. Never a place, a time, a play the facts can't show, or an order.
+    #   - {term: "the Taco Vault", means: "the server's shared-economy joke; a name only", kind: game, tier: all-ages}
+    add: []
+    # Shipped words you don't want, e.g. [lowkey, mid]: never offered, and a draft that uses a removed slang word goes back.
+    # The classic voice at slang heavy uses its own list (lowkey, highkey, ngl, no shot, nah, aura, locked in, goated,
+    # crashed out, unhinged, diabolical, tuff, it's giving, the way, ate, fr, chat is this real, it's so over,
+    # we're so back, POV:): remove takes words out of it, and add (kind: slang, a tier your audience allows) puts yours in.
+    # Write POV without the colon, or as "POV:" in quotes. Careful with its everyday words (ate, the way, nah, fr):
+    # removing one also sends back its plain use ("ate 3 steak").
+    remove: []
+
+# Optional: a column that roasts the server owner. Leave name empty to skip it.
+owner:
+  name: ""
+  desk-title: "The Owner's Desk"
+  # Legends the paper may retell (exactly as written, with dates).
+  lore: []
+  # Whether the paper, the web pages and /stats may show the owner's total hours played. false also means: on the
+  # Player Cards page the owner's card is listed first, and the owner holds no hours rank and no per-hour title or badge.
+  hours-ok: true
+  # How the paper refers to the owner: he | she | they
+  pronoun: they
+
+privacy:
+  # Players the paper never names (e.g. staff test accounts). They are on no web page, and only they can see their /stats.
+  # A newly hidden player is gone from the next paper on (/masthead now writes today's again), and back issues on the
+  # front page then show "a player". The old files in editions/ are not rewritten: edit or delete them by hand.
+  # A hidden player who changes their Minecraft name stays hidden, and the console asks you to add the new name here.
+  # Keep the old name in the list: taking it out un-hides the player.
+  hide-players: []
+  # Extra things the paper must never mention, in plain words.
+  never-mention: []
+  # The day's facts (data/) and the daily stats copies (stats/) are deleted after this many days. The paper's archive
+  # (editions/) is kept. Not covered by this number: events/ and health/ (40 days), blotter/ (14 days), letters (7 days).
+  retention-days: 40
+  # Always on, whatever the settings: no slurs, nothing sexual, nothing about real life/looks/school/family,
+  # no times of day, no base locations, no accusing anyone of real cheating. Roasts hit plays, not people.
+
+schedule:
+  # When the paper comes out (24-hour clock, server time). It covers the 24 hours before this time.
+  # 17:30 works with or without the quotes.
+  time: "05:30"
+  # Optional time zone (e.g. Europe/London). Empty = the server's.
+  zone: ""
+
+writer:
+  # Who writes the paper:
+  #   anthropic         - Claude through Anthropic's own API (needs an API key; see the README for costs)
+  #   openai-compatible - (Beta) any service that speaks the OpenAI chat format: OpenAI, OpenRouter, Gemini, Groq,
+  #                       Mistral, Together, or a model on your own machine (Ollama, LM Studio, vLLM)
+  #   command           - run a local program that reads the prompt on stdin and prints the paper (e.g. the claude CLI)
+  #   exchange          - drop the prompt in the plugin folder's ai/requests for a helper outside the server (see README)
+  #   none              - no AI: a plain "just the facts" edition
+  mode: none
+  timeout-seconds: 300          # local models on a CPU may need more
+  desk-timeout-seconds: 120
+  # Stop using paid AI for the rest of the month after this many US dollars (0 = no limit). Masthead counts what the
+  # anthropic and openai-compatible modes spend (not command or exchange). When it is reached the paper comes out plain
+  # and you get one alert. Also set a spend limit with your AI provider: that is the real safety net.
+  monthly-budget-usd: 10
+
+  anthropic:
+    model: claude-opus-5-5      # cheaper: claude-haiku-5-5 with effort high (about $0.50 a month)
+    effort: medium              # low | medium | high | xhigh | max
+    # Half price: the paper is sent as a batch. If the batch isn't back within 20 minutes, it is cancelled and a normal
+    # call is made instead.
+    batch: true
+    # Where the key comes from, first match wins: api-key-file, then the ANTHROPIC_API_KEY environment variable,
+    # then api-key. Best: a file outside the plugins folder that only the server's user can read (chmod 600).
+    api-key-file: ""
+    api-key: ""
+
+  openai-compatible:
+    base-url: ""                # e.g. https://openrouter.ai/api/v1  (must be https unless the server is on this machine or LAN)
+    model: ""                   # the provider's model name, exactly as its model list shows it
+    # Key, first match wins: api-key-file, then the MASTHEAD_AI_KEY environment variable, then api-key.
+    # Local servers (Ollama, LM Studio) need no key: leave all three empty.
+    api-key-file: ""
+    api-key: ""
+    reasoning-effort: ""        # sent only if set (e.g. low | medium | high); leave empty if unsure
+    # What the model costs, in US dollars per million tokens, for the monthly limit. Leave 0 for a free or local model.
+    # Not needed for OpenRouter (it reports the cost).
+    price-per-million-input: 0
+    price-per-million-output: 0
+    # Optional extra fields added to every request (provider-specific). Masthead's own fields always win.
+    extra-body: {}
+
+  command: ["claude", "-p", "--tools", "", "--strict-mcp-config", "--no-session-persistence", "--output-format", "text"]
+
+web:
+  # builtin - the plugin serves the paper itself on the port below
+  # folder  - write the pages into a folder another web server already serves (e.g. BlueMap's web folder)
+  # off     - no web page (book and join message only)
+  mode: builtin
+  # 0.0.0.0 = players can open the page from anywhere the port is open; 127.0.0.1 = this machine only
+  bind: "0.0.0.0"
+  port: 8150
+  folder: ""
+  # The address players open (used for links and the QR code), ending in "/": the folder, not .../index.html.
+  # Empty = players get no link and no QR code. Example: http://<your server's address>:8150/
+  public-url: ""
+  # folder mode only: that web server's access log, to count readers (optional). Not plugins/Masthead/web-access.log:
+  # that one is the plugin's own, and it is trimmed and may be deleted.
+  access-log: ""
+
+features:
+  # Players can write to the editor with /letter (letters are checked by the AI editor before anything is printed).
+  # Needs an alert channel (see alerts below), so a letter from a player who seems to be having a hard time reaches a
+  # person, and an AI writer (writer.mode anthropic with a key, openai-compatible with a base-url and model, command or
+  # exchange), because only the AI editor prints letters. Without both the mailroom stays closed.
+  # A player can send at most 6 letters or tips a day.
+  mailroom: true
+  # Police Blotter: count what players do to each other's stuff (names and counts only; never locations).
+  blotter: true
+  # Count who read the paper (the count goes in the paper; names only to the owner's notification). Player addresses
+  # are kept in ip-players.txt for 60 days after they were last seen, and the built-in web server's visitor log
+  # (web-access.log: address, time, page) keeps its lines 60 days. Off = no visitor log (old ones are deleted at
+  # start-up and on reload); ip-players.txt is deleted at the next restart.
+  readership: true
+  join-message: true
+  join-delay-seconds: 3
+  # Optional file whose first line goes in the paper's server-health line (e.g. your backup status).
+  health-extra-file: ""
+  # Building Report: how many blocks each player placed since the last paper and their top materials, from the
+  # game's own statistics. Never where, never when. Players who placed fewer than 64 blocks are not listed.
+  # When construction news is on, it takes over: this report is left out while construction news prints, and
+  # otherwise lists only players whose builds are public.
+  building-report: true
+  # Construction news: what players build, grow and knock down. Never where. Off by default.
+  # Turn it on or off, then /masthead reload. WorldEdit/FAWE edits are not counted.
+  construction: false
+
+# Construction news (only used when features.construction is true).
+construction:
+  # The section's heading in the paper.
+  title: "Planning & Zoning"
+  # false = work everything out but print nothing (a dry run). Owner alerts still go out.
+  print: true
+  # What players' builds may say until each player chooses with /news build public or private: public | private
+  # private = nobody's builds are written about until that player types /news build public.
+  default-level: private
+  # Players whose builds may be written about from the start (while they are listed; they can still type
+  # /news build private). Only list players who said yes. Example: [Steve, Alex]
+  opted-in: []
+  # Players may name their builds with /news build name <name> (names are checked before they are printed).
+  names: true
+  # Print the build names in the owner's survey file (often taken from signs). Off: survey builds print by kind only.
+  survey-names: false
+  # A build may also get its name from a sign a builder puts on it, like "Ye Olde Shop" or "Mail Dept". Only signs that read
+  # like a place name count, they get the same checks, and a /news build name always wins. Signs written before this is
+  # turned on are not read.
+  sign-names: false
+  # A build nobody has built on (16+ blocks placed in one day) for this many days is forgotten (7-90). After that the
+  # paper can't tell if someone breaks it. Its permit number is never reused.
+  forget-after-days: 30
+  # At most this many construction stories in a daily paper (1-5).
+  max-entries: 3
+  # A build becomes news once it has this many blocks (16-10000).
+  min-blocks: 64
+  # Someone who did not help build it breaking part of a build:
+  #   blotter = a small amount is a Police Blotter joke; a big amount goes only to the owner's notification
+  #   owner   = never printed; a big amount goes only to the owner's notification
+  #   off     = ignored
+  cross-demolition: blotter
+  # How much the paper says about what a build is and what is inside it:
+  #   basic    = general kinds only ("farm", "mob farm", "house"), nothing about what is inside
+  #   standard = specific kinds and what is inside, but nothing that points at loot or a place: no chest or barrel
+  #              counts, beacons or spawners, and no cactus, bamboo, mushroom, nether wart or kelp (they hint at a biome)
+  #   full     = everything
+  detail: standard
+
+  # Advanced (most servers never change these)
+  # "Big" = at least this many blocks, or at least this percent of the build, in one day.
+  big-demolition-blocks: 100
+  big-demolition-percent: 15
+  # Worlds to ignore, by folder name (e.g. a creative or minigame world).
+  ignore-worlds: []
+  # Safety cap for very busy servers (1000-1000000). Beyond it, activity is dropped and counted, with one warning.
+  max-cells-per-minute: 20000
+
+# Extra names for the commands, e.g. if another plugin already owns /news or /stats, or you want short names.
+# The plugin's own names always work as /masthead:news, /masthead:letter, /masthead:awards, /masthead:stats and
+# /masthead:masthead. Changes need a server restart. Example:
+#   news: [daily, newspaper]
+#   letter: [editor]
+commands:
+  news: []
+  letter: []
+  awards: []
+  stats: []
+  masthead: []
+  # Extra names for /news build, e.g. [permit].
+  build: []
+
+# Notifications to the server owner: the paper is out (readers, mailroom, problems), and right away when a letter
+# sounds like a player is having a hard time. These pushes name players, so keep them private:
+#   - the Discord webhook must point to a private, staff-only channel (Discord pushes about worried letters never
+#     name the player; when Discord is the only channel, an admin sees who with /masthead status in game);
+#   - the ntfy topic must be one nobody can guess: it works like a password. Write the full address,
+#     for example https://ntfy.sh/<a long random topic> (not the topic name alone).
+# With construction news on, the paper-is-out push also carries "Building check" lines (who broke whose build) and
+# new build names, on ntfy and Discord alike.
+alerts:
+  ntfy-url: ""
+  discord-webhook: ""
+  # Set true only if your exchange helper pushes the files in the concern folder to a grown-up. The helper in tools/
+  # does not.
+  helper-pushes-concerns: false

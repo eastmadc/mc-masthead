@@ -1,0 +1,26 @@
+```json
+{"A": {"kind": "mob_farm", "second": "tower", "confidence": "medium", "evidence": []},
+"B": {"kind": "base", "second": "house", "confidence": "high", "evidence": []},
+"C": {"kind": "storage", "second": "house", "confidence": "high", "evidence": []},
+"D": {"kind": "house", "second": "redstone_machine", "confidence": "medium", "evidence": []},
+"E": {"kind": "house", "second": "storage", "confidence": "high", "evidence": []},
+"F": {"kind": "house", "second": "decoration", "confidence": "medium", "evidence": []},
+"G": {"kind": "villager_trading_hall", "second": "villager_breeder", "confidence": "low", "evidence": []},
+"H": {"kind": "villager_trading_hall", "second": "house", "confidence": "medium", "evidence": []},
+"I": {"kind": "crop_farm", "second": "animal_pen", "confidence": "high", "evidence": []},
+"J": {"kind": "auto_farm", "second": "crop_farm", "confidence": "high", "evidence": []},
+"K": {"kind": "bee_farm", "second": "flower_garden", "confidence": "high", "evidence": []},
+"L": {"kind": "item_collector", "second": "slime_farm", "confidence": "medium", "evidence": []},
+"M": {"kind": "auto_farm", "second": "redstone_machine", "confidence": "high", "evidence": []},
+"N": {"kind": "crop_farm", "second": "auto_farm", "confidence": "high", "evidence": []},
+"O": {"kind": "bridge", "second": "mine_tunnel", "confidence": "low", "evidence": []},
+"P": {"kind": "flower_garden", "second": "decoration", "confidence": "high", "evidence": []},
+"Q": {"kind": "auto_farm", "second": "redstone_machine", "confidence": "medium", "evidence": []},
+"R": {"kind": "villager_trading_hall", "second": "villager_breeder", "confidence": "low", "evidence": []},
+"S": {"kind": "slime_farm", "second": "mine_tunnel", "confidence": "medium", "evidence": []},
+"T": {"kind": "decoration", "second": "wall", "confidence": "low", "evidence": []},
+"U": {"kind": "flying_machine", "second": "redstone_machine", "confidence": "medium", "evidence": []},
+"V": {"kind": "decoration", "second": "flower_garden", "confidence": "high", "evidence": []}}
+```
+
+That is every card. A few were close calls between two kinds, so the second choice is filled in for all of them.

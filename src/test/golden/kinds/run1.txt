@@ -1,0 +1,26 @@
+```json
+{
+ "A": {"kind": "mob_farm", "second": "tower", "confidence": "medium", "evidence": []},
+ "B": {"kind": "base", "second": "house", "confidence": "high", "evidence": []},
+ "C": {"kind": "storage", "second": "base", "confidence": "high", "evidence": []},
+ "D": {"kind": "base", "second": "house", "confidence": "medium", "evidence": []},
+ "E": {"kind": "house", "second": "base", "confidence": "high", "evidence": []},
+ "F": {"kind": "house", "second": "base", "confidence": "medium", "evidence": []},
+ "G": {"kind": "house", "second": "villager_breeder", "confidence": "low", "evidence": []},
+ "H": {"kind": "villager_trading_hall", "second": "house", "confidence": "medium", "evidence": []},
+ "I": {"kind": "crop_farm", "second": "flower_garden", "confidence": "high", "evidence": []},
+ "J": {"kind": "auto_farm", "second": "crop_farm", "confidence": "high", "evidence": []},
+ "K": {"kind": "bee_farm", "second": "flower_garden", "confidence": "high", "evidence": []},
+ "L": {"kind": "mob_farm", "second": "item_collector", "confidence": "medium", "evidence": []},
+ "M": {"kind": "auto_farm", "second": "crop_farm", "confidence": "high", "evidence": []},
+ "N": {"kind": "crop_farm", "second": "auto_farm", "confidence": "high", "evidence": []},
+ "O": {"kind": "mine_tunnel", "second": "bridge", "confidence": "medium", "evidence": []},
+ "P": {"kind": "flower_garden", "second": "decoration", "confidence": "high", "evidence": []},
+ "Q": {"kind": "auto_farm", "second": "redstone_machine", "confidence": "medium", "evidence": []},
+ "R": {"kind": "crop_farm", "second": "decoration", "confidence": "medium", "evidence": []},
+ "S": {"kind": "mine_tunnel", "second": "slime_farm", "confidence": "medium", "evidence": []},
+ "T": {"kind": "decoration", "second": "wall", "confidence": "low", "evidence": []},
+ "U": {"kind": "flying_machine", "second": "redstone_machine", "confidence": "medium", "evidence": []},
+ "V": {"kind": "decoration", "second": "flower_garden", "confidence": "high", "evidence": []}
+}
+```

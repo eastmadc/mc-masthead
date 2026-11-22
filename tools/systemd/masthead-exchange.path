@@ -1,0 +1,11 @@
+# Starts masthead-exchange.service whenever a request lands in the requests directory.
+# Edit the path to match your server.
+[Unit]
+Description=Watch for Masthead exchange requests
+
+[Path]
+PathChanged=/srv/minecraft/plugins/Masthead/ai/requests
+Unit=masthead-exchange.service
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,34 @@
+name: Masthead
+version: '1.0.0'
+main: io.github.eastmadc.masthead.Masthead
+api-version: '1.21.8'
+description: "Masthead - the AI newspaper for your server: roasts, awards, a police blotter, player letters, stat cards, a web page and an in-game book."
+authors: [eastmadc]
+website: https://github.com/eastmadc/mc-masthead
+# The Anthropic Java SDK (writer.mode: anthropic). Paper downloads it from Maven Central or Paper's default mirror the first time the plugin loads.
+libraries:
+  - com.anthropic:anthropic-java:3.5.0
+# No extra command names here: owners add their own with commands: in config.yml. /masthead:<command> always works.
+commands:
+  news:
+    description: Today's paper (link, /news qr, /news paper, /news write, /news build)
+    permission: masthead.use
+  awards:
+    description: Today's awards and why
+    permission: masthead.use
+  stats:
+    description: Your season stats (or /stats <player>)
+    permission: masthead.use
+  letter:
+    description: Write a letter or send a news tip to the editor (opens a form)
+    permission: masthead.write
+  masthead:
+    description: Paper admin (reload, status, now, preview, construction)
+    permission: masthead.admin
+permissions:
+  masthead.use:
+    default: true
+  masthead.write:
+    default: true
+  masthead.admin:
+    default: op

@@ -1,0 +1,11 @@
+# Safety net: runs the helper every minute in case a path event was missed (it exits at once when nothing is pending).
+[Unit]
+Description=Periodic Masthead exchange check
+
+[Timer]
+OnBootSec=2min
+OnUnitInactiveSec=1min
+Unit=masthead-exchange.service
+
+[Install]
+WantedBy=timers.target

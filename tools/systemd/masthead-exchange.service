@@ -1,0 +1,24 @@
+# Example user unit: answers Masthead exchange requests with the Claude CLI.
+# Install (as the user whose `claude` login should be used):
+#   mkdir -p ~/.config/systemd/user
+#   cp masthead-exchange.service masthead-exchange.path masthead-exchange.timer ~/.config/systemd/user/
+#   edit the two paths in ExecStart below (and the PathChanged= path in the .path unit), then:
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now masthead-exchange.path masthead-exchange.timer
+#   loginctl enable-linger "$USER"     # keep user units running when you are logged out
+#
+# Permissions: this user must be able to read <ai>/requests and write <ai>/responses, and the Minecraft server user must be
+# able to delete files in both. Requests and answers are readable only by their owner and the folder's group (they hold
+# players' letters), so when this user is not the server's user: put both users in one group, give the two directories
+# that group, and `chmod 2770` them.
+[Unit]
+Description=Masthead exchange helper (Claude CLI)
+
+[Service]
+Type=oneshot
+ExecStart=/opt/masthead/tools/masthead-exchange.sh /srv/minecraft/plugins/Masthead/ai
+# claude is usually installed in ~/.local/bin
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+# Each request carries its own time limit in its name; MASTHEAD_TIMEOUT (default 280) is only for older plugins.
+TimeoutStartSec=30min
+Nice=10
