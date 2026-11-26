@@ -64,7 +64,7 @@ final class Awards {
             if (players.contains(victim) && players.contains(killer) && !victim.equals(killer)) fights.merge(killer + "\t" + victim, 1, Integer::sum);
         }
         fights.forEach((key, times) -> {   // a pair scores once, however many kills: repeat kills of one player win nothing
-            String killer = key.split("\t")[0], victim = key.split("\t")[1], x = times > 1 ? " " + times + " times" : "";
+            String killer = key.split("\t")[0], victim = key.split("\t")[1], x = times > 1 ? " " + Py.commas(times) + " times" : "";
             cool.add(new Reason(50, killer, "took down " + victim + " in PvP" + x));
             sus.add(new Reason(20, victim, "got taken out by their own friend " + killer + x));
         });
@@ -72,20 +72,20 @@ final class Awards {
             String n = e.getKey();
             Stats.Row r = e.getValue();
             long dia = r.num("mined_diamond_ore") + r.num("mined_deepslate_diamond_ore");
-            if (dia >= 5) cool.add(new Reason(dia * 3, n, "mined " + dia + " diamond ore"));
+            if (dia >= 5) cool.add(new Reason(dia * 3, n, "mined " + Py.commas(dia) + " diamond ore"));
             long debris = r.num("mined_ancient_debris");
-            if (debris >= 1) cool.add(new Reason(debris * 8, n, "dug up " + debris + " ancient debris"));
-            if (r.dbl("mob_kills") >= 50) cool.add(new Reason(r.dbl("mob_kills") / 10, n, "killed " + (long) r.dbl("mob_kills") + " mobs"));
+            if (debris >= 1) cool.add(new Reason(debris * 8, n, "dug up " + Py.commas(debris) + " ancient debris"));
+            if (r.dbl("mob_kills") >= 50) cool.add(new Reason(r.dbl("mob_kills") / 10, n, "killed " + Py.commas((long) r.dbl("mob_kills")) + " mobs"));
             if (r.dbl("blocks_mined") >= 2000) cool.add(new Reason(r.dbl("blocks_mined") / 200, n, "broke " + Py.commas((long) r.dbl("blocks_mined")) + " blocks"));
-            if (r.dbl("trades") >= 20) cool.add(new Reason(r.dbl("trades"), n, "made " + (long) r.dbl("trades") + " villager trades"));
+            if (r.dbl("trades") >= 20) cool.add(new Reason(r.dbl("trades"), n, "made " + Py.commas((long) r.dbl("trades")) + " villager trades"));
             if (r.dbl("elytra_m") >= 1000) cool.add(new Reason(r.dbl("elytra_m") / 200, n, "flew " + Py.commas((long) r.dbl("elytra_m")) + " m with an elytra"));
-            if (r.dbl("deaths") >= 2) sus.add(new Reason(r.dbl("deaths") * 15, n, "died " + (long) r.dbl("deaths") + " times"));
+            if (r.dbl("deaths") >= 2) sus.add(new Reason(r.dbl("deaths") * 15, n, "died " + Py.commas((long) r.dbl("deaths")) + " times"));
             if (r.dbl("eggs") >= 100) sus.add(new Reason(r.dbl("eggs") / 20, n, "threw " + Py.commas((long) r.dbl("eggs")) + " eggs"));
             if (r.dbl("jumps") >= 5000) sus.add(new Reason(r.dbl("jumps") / 500, n, "jumped " + Py.commas((long) r.dbl("jumps")) + " times"));
-            if (r.dbl("cake") >= 3) sus.add(new Reason(r.dbl("cake") * 10, n, "ate " + (long) r.dbl("cake") + " slices of cake"));
+            if (r.dbl("cake") >= 3) sus.add(new Reason(r.dbl("cake") * 10, n, "ate " + Py.commas((long) r.dbl("cake")) + " slices of cake"));
             for (Map.Entry<String, Integer> m : SUS_KILLS.entrySet()) {
                 long kk = r.map("killed").getOrDefault(m.getKey(), 0L);
-                if (kk != 0) sus.add(new Reason(kk * m.getValue(), n, "killed " + kk + " " + m.getKey().replace('_', ' ') + (kk > 1 ? "s" : "")));
+                if (kk != 0) sus.add(new Reason(kk * m.getValue(), n, "killed " + Py.commas(kk) + " " + m.getKey().replace('_', ' ') + (kk > 1 ? "s" : "")));
             }
         }
         for (String d : ev.deaths) {
@@ -107,17 +107,17 @@ final class Awards {
                 case "slept_in_bed" -> { }   // a spawn point, never an award reason ("slept in X's bed" read as innuendo)
                 case "broke_container" -> sus.add(new Reason(30, a, "broke " + b + "'s " + (x.isEmpty() ? "chest" : x).replace('_', ' ')));
                 case "took_from" -> {
-                    if (items >= 4) sus.add(new Reason(15 + Math.min(items, 64) / 8.0, a, "took " + items + " items from " + b + "'s chest"));
+                    if (items >= 4) sus.add(new Reason(15 + Math.min(items, 64) / 8.0, a, "took " + Py.commas(items) + " items from " + b + "'s chest"));
                 }
                 case "left_in" -> {
-                    if (items >= 8) cool.add(new Reason(15 + Math.min(items, 64) / 8.0, a, "left " + items + " items for " + b));
+                    if (items >= 8) cool.add(new Reason(15 + Math.min(items, 64) / 8.0, a, "left " + Py.commas(items) + " items for " + b));
                 }
                 case "rode_horse" -> sus.add(new Reason(15, a, "took " + b + "'s " + (x.isEmpty() ? "horse" : x) + " for a ride"));
                 case "egged" -> {
-                    if (n >= 10) sus.add(new Reason(10 + Math.min(n, 100) / 10.0, a, "egged " + b + " " + n + " times"));
+                    if (n >= 10) sus.add(new Reason(10 + Math.min(n, 100) / 10.0, a, "egged " + b + " " + Py.commas(n) + " times"));
                 }
                 case "reeled_in" -> {
-                    if (n >= 3) sus.add(new Reason(12, a, "reeled " + b + " in with a fishing rod " + n + " times"));
+                    if (n >= 3) sus.add(new Reason(12, a, "reeled " + b + " in with a fishing rod " + Py.commas(n) + " times"));
                 }
                 default -> { }
             }

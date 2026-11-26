@@ -88,10 +88,10 @@ public final class ClassicPrompt {
         b.append("- Never call out who did NOT play. Never accuse anyone of real cheating, x-ray, hacking or griefing, and never call anything ")
                 .append(sus ? "stolen or a theft." + StylePrompt.susRule(s) + "\n" : "suspicious, stolen or a theft.\n");
         b.append("- Never joke about what a player's name means; a name is only a label. Write every username in full, exactly as in the data.\n");
-        b.append("- Players are their username or they/them: never he, she, his, her, man, guy, dude or bro for a player");
+        b.append("- Players are their username or they/them: never he, she, his or her for a player");
         if (own && !s.owner().they()) b.append(", except the owner, ").append(ownerName).append(", who is ").append(s.owner().subj()).append('/').append(s.owner().obj())
                 .append(" (in a sentence that names another player, write ").append(ownerName).append(" instead)");
-        b.append(".\n");
+        b.append(". Never call anyone a man, woman, boy, girl, guy, dude or bro.\n");   // after the owner's exception: that one is for pronouns only
         b.append("- Never mention times of day, bedtimes, internet addresses, chat, school, anything outside the game, or where anyone's base is. That includes \"before breakfast\", \"by morning\", \"overnight\", \"late\", \"all night\", \"tonight\", and weekday names. Never say who is anyone's parent, or how old anyone is.\n");
         b.append("- Never use the words ").append(String.join(", ", GateC.WORDS)).append(". Never write a number right after x, y or z, never join three numbers with slashes, and never put a bare number in parentheses: write each number next to its word.\n");
         if (cons) b.append(StylePrompt.constructionHardLines());
@@ -105,7 +105,7 @@ public final class ClassicPrompt {
         b.append("DATA NOTES\n");
         b.append("- Units: *_m keys are meters, play_min is minutes in game. \"eggs\" = eggs THROWN. blocks_mined = all blocks broken. mined_* = ore blocks broken.\n");
         b.append("- Don't add details the data doesn't state (like \"solo\", \"first ever\", \"in one day\", \"in one session\", who went first, or a count of feuds/incidents you didn't get from the data).\n");
-        b.append("- No math: never compute ratios, multiples, percentages, differences or \"Nx more\". Use the numbers as they are. Never convert units.\n");
+        b.append("- No math: never compute ratios, multiples, percentages, differences or \"Nx more\". Use the numbers as they are, with commas in a count of 1,000 or more (\"12,345 blocks\"). Never convert units.\n");
         b.append("- One fact, one home: don't repeat the same stat or event in two sections.\n");
         b.append("- \"leaders\" (whole season) and \"leaders_today\" list the top 3 for each stat, already computed. Only call someone the most / highest / top / #1 at something if \"leaders\" or \"leaders_today\" says so.\n");
         b.append("- \"first_edition\" means this is the paper's first issue, not that the players are new; only \"new_players\" are new.\n");

@@ -309,6 +309,29 @@ public final class MailroomTest {
         fullPages.add(new InGame.Section("", List.of(io.github.eastmadc.masthead.edition.Pages.AI_FOOTER)));
         List<Component> noted = g.pages(new InGame.Edition("2031-03-04", "Daily edition", "The Daily Block", null, null, fullPages, List.of()));
         check(noted.size() == 50 && PlainTextComponentSerializer.plainText().serialize(noted.get(49)).startsWith("Written by an AI"), "book: a full book still ends with the closing note");
+        // the book at every offset: a list item's "Label:" never ends a page or splits over two, and no paragraph leaves one or two words for the next page
+        List<String> labels = List.of("- The Shiny Spoon Award:", "- Mud Pies:", "- The Long Ladder Award:");
+        for (int n = 1; n <= 60; n++) {
+            List<String> paras = new ArrayList<>(List.of("hen ".repeat(n) + "end"));
+            for (String l : labels) paras.add(l + " Kai_Ore crafted 304 blue rugs and the coop has opinions about where every one of them should go");
+            paras.add("Sol_Dig dug a long tunnel under the old barn while the hens kept count of every block and the rooster checked it against his standards");
+            List<String> pt = g.pages(new InGame.Edition("2031-03-04", "Daily edition", "The Daily Block", null, null, List.of(new InGame.Section("Awards", paras)), List.of()))
+                    .stream().map(PlainTextComponentSerializer.plainText()::serialize).toList();
+            for (int i = 1; i < pt.size(); i++) {
+                String x = pt.get(i), seg = x.substring(x.lastIndexOf('\n') + 1), next = i + 1 < pt.size() ? pt.get(i + 1) : "";
+                check(InGame.lines(x.endsWith("\n") ? x.substring(0, x.length() - 1) : x, false) <= 13, "book: no page runs past the bottom (" + n + "): " + x);
+                if (x.endsWith("\n")) continue;   // the page ends between paragraphs
+                check(labels.stream().noneMatch(l -> l.startsWith(seg) || seg.startsWith(l) && InGame.lines(seg, false) <= InGame.lines(l, false)),
+                        "book: a label keeps a line of its text on its page (" + n + "): " + seg);
+                String carried = next.contains("\n") ? next.substring(0, next.indexOf('\n')) : "";
+                check(carried.isEmpty() || carried.split(" ").length > 2 && carried.length() >= 15, "book: no one or two words left for the next page (" + n + "): " + carried);
+            }
+            // a "- Label: Name." item first under a heading: the heading never ends a page alone
+            List<String> ph = g.pages(new InGame.Edition("2031-03-04", "Daily edition", "The Daily Block", null, null, List.of(new InGame.Section("Front", List.of("hen ".repeat(n) + "end.")),
+                    new InGame.Section("Awards", List.of("- Mud Pies: Kai won. The coop has opinions about where every one of the blue rugs should go and the rooster agrees with them."))), List.of()))
+                    .stream().map(PlainTextComponentSerializer.plainText()::serialize).toList();
+            check(ph.stream().noneMatch(x -> x.stripTrailing().endsWith("Awards")), "book: no page ends on a bare heading (" + n + "): " + ph);
+        }
         // today.json round trip: a paragraph longer than the old 600 cut reaches the book whole
         String longP = "word ".repeat(150).strip();
         String todayJson = io.github.eastmadc.masthead.edition.PyJson.dumps(io.github.eastmadc.masthead.edition.GameEdition.build(Settings.defaults(),
@@ -322,6 +345,17 @@ public final class MailroomTest {
                 java.util.Map.of("zombified_piglin", 456789L, "wither_skeleton", 345678L, "elder_guardian", 234567L)), true));
         check(longName.contains("stats \n  (as of their last logout)\n") && InGame.px(longName.split("\n")[0], true) <= 320, "/stats: after a long name the grey note has a line of its own: " + longName);
         check(longName.contains("wither skeleton 345,678,\n   elder guardian 234,567\n") && longName.lines().skip(1).allMatch(x -> InGame.px(x, false) <= 320), "/stats: no kill count wraps away from its mob: " + longName);
+        // /stats fits Minecraft's 10-line chat with every stat: a long name (the note on its own line), big numbers, long mob names and the link
+        for (boolean hours : new boolean[] {true, false}) {
+            List<Component> most = g.statLines(new InGame.Stats("Rex_Owner_Shovel", false, 7654.5, 1234, 56789, 12, 987654, 4321, 77, 123456, 1234.5, 23.4, 345.6, 6789.1, 9876, 543, 21, 8765, 0,
+                    java.util.Map.of("zombified_piglin", 456789L, "wither_skeleton", 345678L, "elder_guardian", 234567L)), hours);
+            String all = plain(most);
+            check(most.size() <= 10 && all.contains("stats \n  (as of their last logout)\n") && !clicks(most).isEmpty(), "/stats fits in 10 lines (hours " + hours + "): " + all);
+            check(java.util.stream.Stream.of("Deaths 1,234", "Mob kills 56,789", "Player kills 12", "Blocks mined 987,654", "Diamond ore 4,321", "Ancient debris 77", "On foot 1,235 km",
+                    "Horse 23.4 km", "Boat 346 km", "Elytra 6,789 km", "Trades 9,876", "Bred 543", "Fish 21", "Eggs 8,765", "Jumps 123,456", "elder guardian 234,567").allMatch(all::contains)
+                    && all.contains("Played 7,654.5 h") == hours && most.stream().allMatch(x -> InGame.px(PlainTextComponentSerializer.plainText().serialize(x), false) <= InGame.CHAT_W),
+                    "/stats in 10 lines drops no stat and keeps each number with its label: " + all);
+        }
         // G3: no paper, or one older than yesterday: no "just landed" line on join, and /news says when the paper comes out
         var st = InGame.class.getDeclaredField("settings");
         st.setAccessible(true);

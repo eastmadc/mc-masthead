@@ -876,6 +876,15 @@ public final class VoiceTest {
                 "FH-R3-5 the owner's pronoun where the owner is named");
         t(has(FactCheck.problems(f, "<p>Juno_B opened Rex_Owner's barrels and her own chest.</p>", D, s), "gender (\"her\")"), "FH-R3-5 any other pronoun is a guess");
         t(has(FactCheck.problems(f, "<p>Juno_B broke 355 blocks with his shovel.</p>", D, s), "gender"), "FH-R3-5 a non-owner alone");
+        // a man, a guy: about the owner too (owner.pronoun is for pronouns only); mob, item and idiom compounds pass
+        t(has(FactCheck.problems(f, "<p>Rex_Owner dug 640 gravel, big numbers for a man of the coop.</p>", D, s), "gender (\"man\")")
+                && has(FactCheck.problems(f, "<p>Sol_Dig traded with a guy at the market.</p>", D, s), "gender (\"guy\")"), "person nouns: a man, a guy");
+        for (String ok : List.of("Kai_Ore beat 4 Enderman and 2 Endermen.", "Sol_Dig built a snowman.", "Juno_B crossed no man's land.", "Kai_Ore ate like Pac-Man.",
+                "Sol_Dig dug a man-made lake.", "Rex_Owner went full Iron Man.", "Juno_B, the madman, beat the middleman.", "Creeper, aw man."))
+            t(!has(FactCheck.problems(f, "<p>" + ok + "</p>", D, s), "gender"), "person nouns: passes: " + ok);
+        JsonObject held = PyJson.loads("{\"deaths\": [\"Kai_Ore was slain by Sol_Dig using [Old Man Sword]\"]}").getAsJsonObject();
+        t(FactCheck.personProblems(s, held, "Kai_Ore swung the Old Man Sword.", names).isEmpty()
+                && FactCheck.personProblems(s, held, "Kai_Ore is a girl.", names).equals(List.of("gender (\"girl\")")), "person nouns: a word the facts hold passes");
         // CFG-R3-2: YAML 1.1 booleans in the lexicon
         List<String> wb = new ArrayList<>();
         Settings ob = load("tone:\n  audience: teens\n  lexicon:\n    add:\n      - {term: yes, means: agreement, kind: slang, tier: teens}\n"

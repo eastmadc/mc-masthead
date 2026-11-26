@@ -361,17 +361,29 @@ public final class InGame implements Listener, TabCompleter, CommandExecutor {
             for (String p : s.paragraphs()) {
                 // split long paragraphs across pages word by word
                 StringBuilder chunk = new StringBuilder();
-                for (String w : p.split(" ")) {
-                    String trial = chunk.isEmpty() ? w : chunk + " " + w;
+                String[] words = p.split(" ");
+                // a list item's "Label:" (up to its first colon, when that is at most 2 lines) keeps a line of its text on the same page
+                int colon = p.startsWith("- ") ? p.indexOf(':') : -1, label = colon < 0 ? 0 : lines(p.substring(0, colon + 1), false);
+                if (label > 2) label = 0;
+                for (int i = 0; i < words.length; i++) {
+                    String w = words[i], trial = chunk.isEmpty() ? w : chunk + " " + w;
                     if (used + lines(trial, false) > H) {
+                        String c = chunk.toString();
                         // end the page on a full sentence when that leaves at most 3 lines empty
-                        int cut = Math.max(chunk.lastIndexOf(". "), Math.max(chunk.lastIndexOf("! "), chunk.lastIndexOf("? "))) + 1;
-                        String rest = "";
-                        if (cut > 0 && lines(chunk.toString(), false) - lines(chunk.substring(0, cut), false) <= 3) { rest = chunk.substring(cut + 1) + " "; chunk.setLength(cut); }
-                        if (!chunk.isEmpty()) page.append(Component.text(chunk.toString(), NamedTextColor.BLACK));
+                        int cut = Math.max(c.lastIndexOf(". "), Math.max(c.lastIndexOf("! "), c.lastIndexOf("? "))) + 1, keep = c.length();
+                        if (cut > 0 && lines(c, false) - lines(c.substring(0, cut), false) <= 3 && lines(c.substring(0, cut), false) > label) keep = cut;
+                        else if (words.length - i <= 2 || String.join(" ", java.util.Arrays.copyOfRange(words, i, words.length)).length() < 15) {
+                            // only one or two words (or under 15 characters) left: the last line goes over with them
+                            int k = c.lastIndexOf(' '), n = lines(c, false);
+                            while (k > 0 && lines(c.substring(0, k), false) >= n) k = c.lastIndexOf(' ', k - 1);
+                            if (lines(c.substring(0, Math.max(k, 0)), false) > label) keep = Math.max(k, 0);
+                        }
+                        if (lines(c.substring(0, keep), false) <= label) keep = 0;   // the whole item starts the next page
+                        String rest = c.substring(keep).strip();
+                        if (keep > 0) page.append(Component.text(c.substring(0, keep), NamedTextColor.BLACK));
                         pages.add(page.build()); page = Component.text(); used = 0;
                         if (pages.size() >= MAXP) return cap(pages, MAXP, e.sections());   // a page added at the end of a paragraph is not counted here
-                        chunk = new StringBuilder(rest + w);
+                        chunk = new StringBuilder(rest.isEmpty() ? w : rest + " " + w);
                     } else {
                         chunk = new StringBuilder(trial);
                     }
@@ -649,13 +661,14 @@ public final class InGame implements Listener, TabCompleter, CommandExecutor {
     private static List<Component> kv(Object... parts) {
         List<Component> out = new ArrayList<>();
         TextComponent.Builder b = null;
-        int w = 0, sep = px("  ·  ", false);
+        int w = 0, sep = px(" · ", false);
         for (int i = 0; i + 1 < parts.length; i += 2) {
+            if (parts[i + 1] == null) continue;   // a pair left out (hours played, when hidden)
             String label = parts[i] + " ", value = String.valueOf(parts[i + 1]);
             int pw = px(label + value, false);
             if (b != null && w + sep + pw > CHAT_W) { out.add(b.build()); b = null; }
             if (b == null) { b = Component.text().append(Component.text("  ")); w = px("  ", false); }
-            else { b.append(Component.text("  ·  ", NamedTextColor.DARK_GRAY)); w += sep; }
+            else { b.append(Component.text(" · ", NamedTextColor.DARK_GRAY)); w += sep; }
             b.append(Component.text(label, NamedTextColor.GRAY)).append(Component.text(value, NamedTextColor.WHITE));
             w += pw;
         }
@@ -682,11 +695,11 @@ public final class InGame implements Listener, TabCompleter, CommandExecutor {
         boolean own = px(head, true) + px(note, false) > CHAT_W;   // after a long name the grey note gets a line of its own
         l.add(Component.text().append(Component.text(head, NamedTextColor.GOLD, TextDecoration.BOLD)).append(Component.text(own ? "" : note, NamedTextColor.DARK_GRAY)).build());
         if (own) l.add(Component.text("  " + note, NamedTextColor.DARK_GRAY));
-        if (hours) l.addAll(kv("Played", String.format(Locale.ROOT, "%,.1f h", s.playH()), "Deaths", n(s.deaths()), "Mob kills", n(s.mobKills()), "Player kills", n(s.playerKills())));
-        else l.addAll(kv("Deaths", n(s.deaths()), "Mob kills", n(s.mobKills()), "Player kills", n(s.playerKills())));
-        l.addAll(kv("Blocks mined", n(s.blocksMined()), "Diamond ore", n(s.diamonds()), "Ancient debris", n(s.debris())));
-        l.addAll(kv("On foot", km(s.footKm()), "Horse", km(s.horseKm()), "Boat", km(s.boatKm()), "Elytra", km(s.elytraKm())));
-        l.addAll(kv("Trades", n(s.trades()), "Bred", n(s.bred()), "Fish", n(s.fish()), "Eggs", n(s.eggs()), "Jumps", n(s.jumps())));
+        // one run of pairs, not a line per group: the short ends of the groups pushed the header out of the 10-line chat
+        l.addAll(kv("Played", hours ? String.format(Locale.ROOT, "%,.1f h", s.playH()) : null, "Deaths", n(s.deaths()), "Mob kills", n(s.mobKills()), "Player kills", n(s.playerKills()),
+                "Blocks mined", n(s.blocksMined()), "Diamond ore", n(s.diamonds()), "Ancient debris", n(s.debris()),
+                "On foot", km(s.footKm()), "Horse", km(s.horseKm()), "Boat", km(s.boatKm()), "Elytra", km(s.elytraKm()),
+                "Trades", n(s.trades()), "Bred", n(s.bred()), "Fish", n(s.fish()), "Eggs", n(s.eggs()), "Jumps", n(s.jumps())));
         List<Map.Entry<String, Long>> top = new ArrayList<>(s.killed().entrySet());
         top.sort((a, b) -> Long.compare(b.getValue(), a.getValue()));
         if (!top.isEmpty()) {

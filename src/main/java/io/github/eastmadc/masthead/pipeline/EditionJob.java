@@ -368,7 +368,7 @@ public final class EditionJob {
                 + " (a number right after x, y or z, three numbers joined by slashes, the word at followed by two numbers, numbers in parentheses or with"
                 + " minus signs): rewrite every number next to its word. \"claim\" problems quote a word that says a play happened when the data doesn't"
                 + " show it: remove it. \"floor\" and \"family\" problems quote a word the paper never prints: remove it."
-                + " \"gender\" problems quote a he/she word next to a player's name: use the username or they/them. \"removed\" problems quote"
+                + " \"gender\" problems quote a he/she word next to a player's name, or a word like man or guy: use the username or they/them. \"removed\" problems quote"
                 + " a word this paper may not use: remove it.)"
                 + (ConstructionGate.on(s) ? "\n" + ConstructionGate.REWRITE_NOTE : "")
                 + "\nRewrite the whole edition: use only numbers that appear in the data, and none of those phrases. Fix only the lines with problems: keep every"

@@ -497,7 +497,7 @@ public final class PipelineTest {
                 && sb.construction().forgetAfterDays() == 90 && sb.construction().optedIn().size() >= 9, "example preset: practice run, opt-in list, 90 days");
         // shipped files (build/classes holds the resources)
         String py = new String(PipelineTest.class.getResourceAsStream("/plugin.yml").readAllBytes(), StandardCharsets.UTF_8);
-        check(py.matches("(?s).*version: '1\\.0\\.0(-(alpha|beta|rc)\\.\\d+)?'.*"), "plugin.yml version is 1.0.0, 1.0.0-alpha.N, 1.0.0-beta.N or 1.0.0-rc.N (R14)");
+        check(py.matches("(?s).*version: '1\\.0\\.1(-(alpha|beta|rc)\\.\\d+)?'.*"), "plugin.yml version is 1.0.1, 1.0.1-alpha.N, 1.0.1-beta.N or 1.0.1-rc.N (R14)");
         check(py.contains("authors: [eastmadc]"), "plugin.yml author is the handle, not a real name (R5)");
         String page = io.github.eastmadc.masthead.edition.Pages.index(load(""), new com.google.gson.JsonObject(), "", List.of(), java.time.LocalDate.of(2026, 11, 5), true);
         check(!page.contains("googleapis") && !page.contains("gstatic") && page.contains("Written by an AI"), "the page loads nothing from other websites and says it is AI-written (R7, R11)");

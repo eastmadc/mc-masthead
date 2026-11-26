@@ -366,7 +366,7 @@ public final class StylePrompt {
         b.append("- Never joke about, explain or play on what a player's name means; a name is only a label.\n");
         b.append("- Refer to players by name or as they/them. Never guess anyone's gender from their name.");
         if (own) b.append(" The owner, ").append(ownerName).append(", is ").append(s.owner().subj()).append('/').append(s.owner().obj()).append('.');
-        b.append('\n');
+        b.append(" Never call anyone a man, woman, boy, girl or guy.\n");
         b.append("- Never mention times of day, bedtimes, internet addresses, chat, anything outside the game, or where anyone's base is. That includes \"before breakfast\", \"by morning\", \"overnight\", \"late\", \"all night\", and weekday names. Never say who is anyone's parent, or how old anyone is.\n");
         b.append("- Never use the words ").append(String.join(", ", GateC.WORDS)).append(" anywhere in the paper (not even \"a chunk of\" something).\n");
         b.append("- Anywhere in the paper, never write a number straight after the letter x, y or z (\"x3\", \"x2 combo\"), never join three numbers with slashes (\"4/1/0\"), never write \"at\" followed by two numbers (\"finished at 14, 2 ahead\"), never put a minus sign next to another number, and never put a bare number in parentheses, not even one count like (3,100), or two (\"(41, 980)\"): write each number next to its word (\"three creeper blasts\", \"4 kills, 1 death\").\n");
@@ -382,7 +382,7 @@ public final class StylePrompt {
         b.append("- \"killed\", \"mined\", \"used\", \"crafted\" and \"broken\" (tools and armor worn out) are top lists: a missing item is unknown, not zero.\n");
         b.append("- Don't add details the data doesn't state (like \"solo\", \"first ever\", \"in one day\", \"in one session\", \"in a single sitting\", \"in one go\", who went first, or a count of feuds/incidents you didn't get from the data).\n");
         b.append("- Never call anything a \"record\", a \"personal best\", a \"first time\" or \"all-time\" unless the data says so.\n");
-        b.append("- No math: never compute ratios, multiples, percentages, differences or \"Nx more\" (\"15 times the runner-up\", \"13x second place\"). Use the numbers as they are. Never convert units (minutes stay minutes; never call them hours unless the data gives hours).\n");
+        b.append("- No math: never compute ratios, multiples, percentages, differences or \"Nx more\" (\"15 times the runner-up\", \"13x second place\"). Use the numbers as they are, with commas in a count of 1,000 or more (\"12,345 blocks\"). Never convert units (minutes stay minutes; never call them hours unless the data gives hours).\n");
         b.append("- One fact, one home: don't repeat the same stat or event in two sections, and don't tell the same story twice under different headings (an advancement in an award still gets its Achievements line).\n");
         b.append("- \"leaders\" (whole season) and \"leaders_today\" list the top 3 for each stat, already computed. Only call someone the most / highest / top / #1 at something if \"leaders\" or \"leaders_today\" says so. Never rank players yourself beyond that.\n");
         b.append("- \"first_edition\" means this is the newsletter's first issue. It does NOT mean the players or accounts are new; only \"new_players\" are new.\n");
@@ -476,7 +476,7 @@ public final class StylePrompt {
         b.append(susRule(s));
         b.append('\n');
         b.append("- Beds and animals: a bed appears only as a broken bed from the Blotter; never who sleeps, respawns or sets spawn where, and nothing about sharing one. Bred animals are a farm count only: no love, romance, Venus, or anything about the animals' private lives.\n");
-        b.append("- People words: ").append(own ? "anyone but the owner" : "every player").append(" is their username or they/them; never \"the man\", \"dude\", \"bro\", \"king\", \"guy\", \"queen\".");
+        b.append("- People words: ").append(own ? "anyone but the owner" : "every player").append(" is their username or they/them; never call anyone \"the man\", \"dude\", \"bro\", \"king\", \"guy\", \"queen\".");
         if (own && !s.owner().they()) {
             String[] p = s.owner().pronoun().equals("he") ? new String[]{"he", "him", "his"} : new String[]{"she", "her", "hers"};
             b.append(" \"").append(p[0]).append("\", \"").append(p[1]).append("\" and \"").append(p[2]).append("\" only ever mean ").append(ownerName).append('.');

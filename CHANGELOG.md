@@ -2,6 +2,16 @@
 
 Versions marked "private test build" were never published. They are kept here as history.
 
+## 1.0.1
+
+Fixed
+- The paper never calls anyone a man, woman, boy, girl or guy. A draft that does is sent back to the AI, like a
+  guessed he or she.
+- Numbers are written one way: a count of 1,000 or more gets commas ("12,345 blocks"), in award reasons and in the
+  AI's writing.
+- The in-game book keeps a list label with its text and never leaves just one or two words for the next page.
+- `/stats` fits the 10-line chat view.
+
 ## 1.0.0
 
 First public release. The notes below list what changed since the last private test build (1.0.0-alpha.34); on a

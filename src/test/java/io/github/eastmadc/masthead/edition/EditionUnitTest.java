@@ -199,6 +199,7 @@ public final class EditionUnitTest {
             t(!MailDesk.rules(g).contains("__SPELLING__"), "no placeholder left");
         }
         t(ClassicPrompt.build(british(classic)).contains("colour, favourite, grey, centre"), "classic: UK examples");
+        t(ClassicPrompt.build(british(classic)).contains("Never call anyone a man, woman, boy, girl, guy, dude or bro.") && ClassicPrompt.build(british(classic)).contains("with commas in a count of 1,000 or more"), "classic: person nouns and commas lines");
         LocalDate d = LocalDate.of(2026, 11, 14);
         t(Py.dayLabel(d, false).equals("Sat Nov 14, 2026"), "US label " + Py.dayLabel(d, false));
         t(Py.dayLabel(d, true).equals("Sat 14 Nov 2026"), "UK label " + Py.dayLabel(d, true));
@@ -531,6 +532,10 @@ public final class EditionUnitTest {
         t(FactCheck.problems(md, "<p>Kai_Ore has mined 2.5 million blocks, nearly 3 million.</p>", d, TestSettings.other()).isEmpty(), "X5 a real 2512345 as 2.5 million passes: "
                 + FactCheck.problems(md, "<p>Kai_Ore has mined 2.5 million blocks, nearly 3 million.</p>", d, TestSettings.other()));
         t(FactCheck.problems(md, "<p>Kai_Ore has mined 2.6 million blocks.</p>", d, TestSettings.other()).equals(List.of("2600000")), "X5 a made-up million is still caught");
+        // a count with or without commas is the same number, in the draft and in a data string (an award reason)
+        JsonObject gd = PyJson.loads("{\"week\": {\"Kai_Ore\": {\"crafted\": {\"stick\": 123456}}}, \"awards\": {\"golden_egg\": {\"winner\": \"Kai_Ore\", \"reasons\": [\"killed 6,789 mobs\"]}}}").getAsJsonObject();
+        for (String ok : List.of("Kai_Ore crafted 123,456 sticks and killed 6,789 mobs.", "Kai_Ore crafted 123456 sticks and killed 6789 mobs."))
+            t(FactCheck.problems(gd, "<p>" + ok + "</p>", d, TestSettings.other()).isEmpty(), "grouping never fails a draft: " + ok + " " + FactCheck.problems(gd, "<p>" + ok + "</p>", d, TestSettings.other()));
         // never-mention: a short phrase is checked word for word in the mail and the edition
         Settings nm = new Settings(TestSettings.other().paper(), TestSettings.other().tone(), TestSettings.other().owner(),
                 new Settings.Privacy(List.of(), List.of("the old map", "anyone's real name or where they go to school")), TestSettings.other().schedule(),
@@ -588,14 +593,14 @@ public final class EditionUnitTest {
                 && !GameEdition.build(sn(), LocalDate.parse("2026-11-05"), new JsonObject(), "<h2>T \u00a7c</h2><h3>S</h3><p>Town code \u00a7kSecret</p>", "L \u00a7l", true, null).toString().contains("\u00a7"),
                 "G6: no section sign in the in-game text: " + GameEdition.txt("Town code \u00a7kSecret, rule &sect;4"));
         // pronouns: a hard line for players; the owner gets owner.pronoun, never a hard-coded "he"
-        String rule = "- Refer to players by name or as they/them. Never guess anyone's gender from their name.";
-        t(sp.contains(rule + "\n"), "pronoun hard line without an owner");
+        String rule = "- Refer to players by name or as they/them. Never guess anyone's gender from their name.", nouns = " Never call anyone a man, woman, boy, girl or guy.\n";
+        t(sp.contains(rule + nouns), "pronoun hard line without an owner");
         Settings sn = TestSettings.coop();
         for (String[] pr : new String[][] {{"she", "she/her", "what she did today", "from her season stats"},
                 {"they", "they/them", "what they did today", "from their season stats"}, {"he", "he/him", "what he did today", "from his season stats"}}) {
             String op = StylePrompt.build(new Settings(sn.paper(), sn.tone(), new Settings.Owner("TownFounder", "From the Coop Office", List.of(), true, pr[0]),
                     sn.privacy(), sn.schedule(), sn.writer(), sn.web(), sn.features(), sn.alerts()));
-            t(op.contains(rule + " The owner, TownFounder, is " + pr[1] + ".\n") && op.contains(pr[2]) && op.contains(pr[3]), "owner pronoun " + pr[0]);
+            t(op.contains(rule + " The owner, TownFounder, is " + pr[1] + "." + nouns) && op.contains(pr[2]) && op.contains(pr[3]), "owner pronoun " + pr[0]);
             if (!pr[0].equals("he")) t(!op.contains(" he ") && !op.contains(" his "), "no stray he/his for owner pronoun " + pr[0]);
         }
         // an owner in privacy.hide-players (any case) is no owner: not on the front page, not in the prompts

@@ -10,7 +10,7 @@ theme, for example *The Daily Cluck*, "a small-town paper for a town that takes 
   any OpenAI-format service, or a model on your own machine. Masthead has no service or account of its own.
 - **Needs** Paper 1.21.8 or newer (or Purpur). Not Spigot, not Folia. The first start needs internet to download one
   library.
-- **Get it:** [Releases](https://github.com/eastmadc/mc-masthead/releases), then [Install](#install).
+- **Get it:** [Releases](https://github.com/eastmadc/mc-masthead/releases) or [Hangar](https://hangar.papermc.io/eastmadc/Masthead), then [Install](#install).
 
 ![A sample front page](branding/screenshot-front-page.png)
 
@@ -81,7 +81,7 @@ The mailroom also stays closed without an AI writer (`writer.mode: none`, `anthr
 `/masthead status` then shows `Mailroom: off (needs an AI writer)`.
 
 ## Install
-Get the jar from the [GitHub Releases page](https://github.com/eastmadc/mc-masthead/releases).
+Get the jar from the [GitHub Releases page](https://github.com/eastmadc/mc-masthead/releases) or from [Hangar](https://hangar.papermc.io/eastmadc/Masthead) (the same jar).
 
 **Works on** (tested on a running server):
 

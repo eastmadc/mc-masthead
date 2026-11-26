@@ -285,6 +285,7 @@ public final class FactCheck {
             out.addAll(Lexicon.tierProblems(settings, own, names));   // no word above tone.audience
             for (String r : Lexicon.restProblems(settings, data, own, names)) if (!r.startsWith("slang ")) out.add(r);   // a removed word (resting is style)
             out.addAll(genderProblems(settings, text, names));
+            out.addAll(personProblems(settings, data, own, names));
         }
         // the paper only: dated slang, and tics that became a habit (a player's letter may still say them)
         if (!ClassicPrompt.heavy(settings))   // heavy slang: the readers' own words pass
@@ -416,6 +417,26 @@ public final class FactCheck {
                 }
             }
         }
+        List<String> out = new ArrayList<>();
+        for (String h : hit) out.add("gender (\"" + h + "\")");
+        return out;
+    }
+
+    /** A word that says a person is a man, a woman, a boy, a girl or a guy ("adult" and "kid" are the family check's). Compounds pass: Enderman, Pac-Man, man-made. */
+    private static final Pattern PERSON_NOUN = Pattern.compile("(?<![\\w-])(?:m[ae]n|wom[ae]n|boys?|girls?|guys?|gentlem[ae]n|lady|ladies)(?![\\w-])");
+    /** Names, idioms and interjections that hold one but call no one anything. */
+    private static final Pattern NOT_PERSON = Pattern.compile("(?<![\\w-])(?:no\\s+man['’]?s\\s+land|iron\\s+man|lady\\s+luck|(?:aw|oh)\\s+(?:man|boy))(?![\\w-])");
+
+    /**
+     * "gender (\"man\")": a word from PERSON_NOUN anywhere in the paper, about the owner too (owner.pronoun is for pronouns only).
+     * Player names are cut first, and a word the facts hold (a build's name, a death line, the owner's lore) is theirs.
+     */
+    static List<String> personProblems(Settings s, JsonObject data, String text, java.util.Collection<String> names) {
+        Set<String> held = new HashSet<>();
+        for (Matcher m = PERSON_NOUN.matcher(WordGate.norm(String.join(" | ", Lexicon.heldText(s, data)))); m.find(); ) held.add(m.group());
+        TreeSet<String> hit = new TreeSet<>();
+        for (Matcher m = PERSON_NOUN.matcher(NOT_PERSON.matcher(WordGate.withoutNames(text, names)).replaceAll(" ")); m.find(); )
+            if (!held.contains(m.group())) hit.add(m.group());
         List<String> out = new ArrayList<>();
         for (String h : hit) out.add("gender (\"" + h + "\")");
         return out;

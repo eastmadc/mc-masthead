@@ -1,5 +1,5 @@
 name: Masthead
-version: '1.0.0'
+version: '1.0.1'
 main: io.github.eastmadc.masthead.Masthead
 api-version: '1.21.8'
 description: "Masthead - the AI newspaper for your server: roasts, awards, a police blotter, player letters, stat cards, a web page and an in-game book."

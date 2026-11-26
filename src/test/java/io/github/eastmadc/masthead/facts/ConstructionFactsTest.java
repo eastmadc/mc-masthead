@@ -136,6 +136,14 @@ public final class ConstructionFactsTest {
         t(pv.getAsJsonObject("golden_egg").get("winner").getAsString().equals("Sam_Redstone")
                 && pv.getAsJsonObject("headless_chicken").get("winner").getAsString().equals("Sam_Redstone") && pv.toString().contains("in PvP 6 times"),
                 "F3: a killer/victim pair scores once: " + pv);
+        // award reasons (the paper's data and the [why?] tooltip) group their counts as /stats does
+        Stats.Row big = new Stats.Row();
+        big.nums.put("mob_kills", 6789L);
+        big.nums.put("trades", 1200L);
+        big.nums.put("deaths", 1500L);
+        JsonObject bg = Awards.pick(java.util.Map.of("Steve_Builder", big), emptyEvents(), PLAYERS, List.of());
+        t(bg.getAsJsonObject("golden_egg").get("reasons").toString().equals("[\"made 1,200 villager trades\",\"killed 6,789 mobs\"]")
+                && bg.getAsJsonObject("headless_chicken").get("reasons").toString().equals("[\"died 1,500 times\"]"), "award reasons use commas: " + bg);
 
         // P18 / the hand-off: off, or on in a practice run, the facts are byte-identical; on and printing, the block is there
         Path dir = Files.createTempDirectory("cons-facts");
