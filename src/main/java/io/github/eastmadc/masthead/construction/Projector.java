@@ -92,7 +92,7 @@ final class Projector {
             boolean seen = false;
             for (SiteIndex.Mention m : s.mentions) if (m.d.compareTo(recent) >= 0 && m.d.compareTo(ds) < 0) seen = true;
             String tag = tag(s, o, prefs, c.minBlocks(), seen);
-            if (tag == null) continue;
+            if (tag == null || s.crew.size() > 6) continue;   // the facts check drops more than 6 builders (as the survey does)
             int score = PRIORITY.get(tag);
             for (String p : s.crew) {
                 Prefs.P pp = prefs.players.get(p);

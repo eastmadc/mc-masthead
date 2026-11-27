@@ -2,6 +2,12 @@
 
 Versions marked "private test build" were never published. They are kept here as history.
 
+## 1.0.2
+
+Fixed
+- A build with more than 6 builders is no longer picked for a construction story. The facts check left it out,
+  so the paper had no construction story that day. The next build gets the story instead.
+
 ## 1.0.1
 
 Fixed

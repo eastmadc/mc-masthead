@@ -513,6 +513,19 @@ public final class ConstructionTest {
         for (JsonElement x : s.entries()) if (x.toString().contains(STEVE)) steve++;
         t(s.entries().size() == 3 && steve <= 1, "F-20: three entries, Steve in at most one");
 
+        // a build with 7 crew is never picked: the facts check drops more than 6 builders, which emptied the section
+        String[] seven = {STEVE, ALEX, SAM, "Pat_Pine", "Kim_Kelp", "Lou_Loam", "Dee_Dune"};
+        s = new Sc().notice(seven).notice("Bo_Birch");
+        for (int i = 0; i < 7; i++) s.box(seven[i], "oak_planks", X, Y + 2 * i, Z, X + 9, Y + 2 * i + 1, Z + 9);
+        s.box("Bo_Birch", "oak_planks", X + 60, Y, Z, X + 67, Y + 1, Z + 7);
+        s.fold();
+        boolean big = s.idx.sites.values().stream().anyMatch(x -> x.crew.size() == 7), over6 = false, bo = false;
+        for (JsonElement x : s.entries()) {
+            over6 |= x.getAsJsonObject().getAsJsonArray("builders").size() > 6;
+            bo |= x.toString().contains("Bo_Birch");
+        }
+        t(big && !over6 && bo, "a 7-crew build is skipped and the next build gets the story: " + s.entries());
+
         // F-26: a private build never takes a permit number
         s = new Sc().notice(STEVE, ALEX);
         s.prefs.get(s.id(ALEX).toString()).level = "private";
